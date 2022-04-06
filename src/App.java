@@ -49,18 +49,23 @@ public class App {
         System.out.printf("%.2f\n", suporteRegra1(mulheres));
         System.out.println("Confiança regra 1:");
         System.out.printf("%.2f\n", confiancaRegra1(mulheres));
+        System.out.println("Lift regra 1:");
+        System.out.printf("%.4f\n", liftRegra1(mulheres));
 
         System.out.println("=======================");
         
-        System.out.println("MULHERES COM MENOS DE 30 ANOS, QUE TENHAM MAIS DE 10 ANOS DE ESCOLARIDADE E QUE SÃO CASADAS:");
+        System.out.println("MULHERES COM MAIS DE 25 ANOS, QUE TENHAM MAIS DE 10 ANOS DE ESCOLARIDADE E QUE SÃO CASADAS:");
         System.out.println("Suporte regra 2:");
         System.out.printf("%.2f\n", suporteRegra2(mulheres));
         System.out.println("Confiança regra 2:");
         System.out.printf("%.2f\n", confiancaRegra2(mulheres));
+        System.out.println("Lift regra 2:");
+        System.out.printf("%.4f\n", liftRegra2(mulheres));
     }
 
 
     //MULHERES QUE TRABALHAM, NÃO SÃO CASADAS E TEM MAIS DE 10 ANOS DE ESCOLARIDADE
+    //suporte
     public static double suporteRegra1(Mulheres[] mulheres) {
 
         int frequencia = 0;
@@ -74,6 +79,7 @@ public class App {
         return frequencia / (double) mulheres.length;
     }
 
+    //confiança
     public static double confiancaRegra1(Mulheres[] mulheres) {
 
         int frequencia1 = 0;
@@ -93,6 +99,33 @@ public class App {
         return (double) frequencia1 / (double) frequencia2;
     }
 
+    //lift
+    public static double liftRegra1(Mulheres[] mulheres) {
+
+        int frequencia1 = 0;
+        int frequencia2 = 0;
+        int frequencia3 = 0;
+    
+        for (int i = 0; i < mulheres.length; i++) {
+            if (mulheres[i].getTrabalho() == 1 && mulheres[i].getCasada() == 0 && mulheres[i].getEscolaridade() >= 10) {
+                frequencia1 += 1;
+            }
+        }
+
+        for (int i = 0; i < mulheres.length; i++) {
+            if (mulheres[i].getTrabalho() == 1 && mulheres[i].getCasada() == 0) {
+                frequencia2 += 1;
+            }
+        }
+
+        for (int i = 0; i < mulheres.length; i++) {
+            if (mulheres[i].getCasada() == 0) {
+                frequencia3 += 1;
+            }
+        }
+
+        return (double) frequencia1 / (double) (frequencia2 * frequencia3);
+    }
 
     //MULHERES COM MENOS DE 30 ANOS, QUE TENHAM MAIS DE 10 ANOS DE ESCOLARIDADE E QUE SÃO CASADAS
     public static double suporteRegra2(Mulheres[] mulheres) {
@@ -100,7 +133,7 @@ public class App {
         int frequencia = 0;
     
         for (int i = 0; i < mulheres.length; i++) {
-            if (mulheres[i].getIdade() <= 30 && mulheres[i].getEscolaridade() >= 10 && mulheres[i].getCasada() == 1) {
+            if (mulheres[i].getIdade() >= 25 && mulheres[i].getEscolaridade() >= 10 && mulheres[i].getCasada() == 1) {
                 frequencia += 1;
             }
         }
@@ -114,17 +147,45 @@ public class App {
         int frequencia2 = 0;
     
         for (int i = 0; i < mulheres.length; i++) {
-            if (mulheres[i].getIdade() <= 30 && mulheres[i].getEscolaridade() >= 10 && mulheres[i].getCasada() == 1) {
+            if (mulheres[i].getIdade() >= 25 && mulheres[i].getEscolaridade() >= 10 && mulheres[i].getCasada() == 1) {
                 frequencia1 += 1;
             }
         }
 
         for (int i = 0; i < mulheres.length; i++) {
-            if (mulheres[i].getIdade() <= 30 && mulheres[i].getEscolaridade() >= 10) {
+            if (mulheres[i].getIdade() >= 25 && mulheres[i].getEscolaridade() >= 10) {
                 frequencia2 += 1;
             }
         }
 
         return (double) frequencia1 / (double) frequencia2;
+    }
+
+    //lift
+    public static double liftRegra2(Mulheres[] mulheres) {
+
+        int frequencia1 = 0;
+        int frequencia2 = 0;
+        int frequencia3 = 0;
+    
+        for (int i = 0; i < mulheres.length; i++) {
+            if (mulheres[i].getIdade() >= 25 && mulheres[i].getEscolaridade() >= 10 && mulheres[i].getCasada() == 1) {
+                frequencia1 += 1;
+            }
+        }
+
+        for (int i = 0; i < mulheres.length; i++) {
+            if (mulheres[i].getIdade() >= 25 && mulheres[i].getEscolaridade() >= 10) {
+                frequencia2 += 1;
+            }
+        }
+
+        for (int i = 0; i < mulheres.length; i++) {
+            if (mulheres[i].getCasada() == 1) {
+                frequencia3 += 1;
+            }
+        }
+
+        return (double) frequencia1 / (double) (frequencia2 * frequencia3);
     }
 }
